@@ -1,0 +1,33 @@
+FROM ros:noetic-ros-base
+
+RUN apt-get update && \
+  apt-get install -y ros-noetic-rosserial-arduino ros-noetic-rosserial git python3-pip && \
+  apt-get -y clean && \
+  apt-get -y purge && \
+  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+#SHELL ["/bin/bash", "-c"]
+#ENV CATKIN_WS /catkin_ws
+
+#RUN source /opt/ros/$ROS_DISTRO/setup.bash && \
+#  mkdir -p $CATKIN_WS/src && \
+#  cd $CATKIN_WS && \
+#  catkin_make
+
+
+COPY noetic/requirements.txt .
+RUN pip3 install --no-cache-dir -r requirements.txt
+
+RUN mkdir -p /catkin_ws/src/ws_2024
+
+WORKDIR /
+
+
+COPY /noetic/mainbrain.sh .
+
+
+#CMD ["/bin/bash", "-c", "source /opt/ros/$ROS_DISTRO/setup.bash && source /catkin_ws/devel/setup.bash"]
+
+
+
+

@@ -1,0 +1,38 @@
+services:
+  ros:
+    build:
+      context: .
+      dockerfile: Dockerfile.noetic
+    image: bfmc2025
+    container_name: bfmc2025_container
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - shared-volume:/tmp
+      - ../bfmc_2025/ws_2024:/catkin_ws/src/ws_2024
+      - ../bfmc_2025/shared_code:/catkin_ws/src/shared_code
+    tty: true
+    privileged: true
+    environment:
+      - DISPLAY=$DISPLAY 
+      - ROS_DISTRO=noetic
+    #command: /bin/bash -c "source /opt/ros/noetic/setup.bash && source /catkin_ws/devel/setup.bash && bash"
+    #command: python3 "server.py"
+    command: /bin/bash
+    
+  picamera:
+    build:
+      context: .
+      dockerfile: Dockerfile.picamera
+    image: bfmc2025_picamera2
+    container_name: bfmc2025_picamera2_container
+    volumes:
+      - shared-volume:/tmp
+      - /run/udev:/run/udev:ro
+    tty: true
+    privileged: true
+    #command: python3 "client.py"
+    command: /bin/bash
+
+volumes:
+  shared-volume:
+    driver: local
