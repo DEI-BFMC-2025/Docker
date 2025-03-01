@@ -8,16 +8,21 @@ services:
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix
       - shared-volume:/tmp
-      - ../bfmc_2025/ws_2024:/catkin_ws/src/ws_2024
-      - ../bfmc_2025/shared_code:/catkin_ws/src/shared_code
+      - ../../Brain/brain/src:/catkin_ws/src
     tty: true
     privileged: true
     environment:
       - DISPLAY=$DISPLAY 
       - ROS_DISTRO=noetic
+      - LD_LIBRARY_PATH=/opt/vc/lib
+    devices:
+      - /dev/ttyACM0:/dev/ttyACM0
+      - /dev/ttyACM1:/dev/ttyACM1
+      - /dev/gpiomem:/dev/gpiomem
+      - /dev/mem:/dev/mem
     #command: /bin/bash -c "source /opt/ros/noetic/setup.bash && source /catkin_ws/devel/setup.bash && bash"
-    #command: python3 "server.py"
-    command: /bin/bash
+    command: tail -f /dev/null
+
     
   picamera:
     build:
@@ -31,7 +36,7 @@ services:
     tty: true
     privileged: true
     #command: python3 "client.py"
-    command: /bin/bash
+    command: tail -f /dev/null
 
 volumes:
   shared-volume:

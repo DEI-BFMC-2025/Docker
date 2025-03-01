@@ -15,13 +15,13 @@ class UnixSocketClient:
     def initialize_camera(self, config):
         camera = Picamera2()
         config = camera.create_preview_configuration(config)
-        camera.align_configuration(config) # in case of use of bad format
+        camera.align_configuration(config) # in case of use of bad format (read datasheet)
         camera.configure(config)
         camera.start()
         return camera
 
     def wait_for_server(self):
-        # Continuously attempt to connect to the server
+        # Keep attempting to connect to the server
         while True:
             try:
                 self.sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
@@ -29,27 +29,30 @@ class UnixSocketClient:
                 print("Connected to server.")
                 break
             except socket.error:
-                print(f"Server not available. Retrying in {self.retry_interval} second(s)...")
+                print(f"Camera ready to send frames, waiting for communication on the socket. Retrying in {self.retry_interval} second(s)...")
                 time.sleep(self.retry_interval)
 
     def reconnect_on_broken_pipe(self):
         # Reconnect to the server in case of a broken pipe
         print("Broken pipe detected, attempting to reconnect...")
         if self.sock:
-            self.sock.close()  # Close the old socket
+            self.sock.close()  # We need to close the old socket
         self.wait_for_server()
 
     def send_frames(self):
         try:
             while True:
-                # Capture image as numpy array
+                # capture image as numpy array
                 array = self.camera.capture_array("main")
                 arr2_pack = array.tobytes()
 
                 try:
                     self.sock.sendall(arr2_pack)
-                except BrokenPipeError:
+                except (BrokenPipeError, socket.error):  #socket.error added to catch all socket errors hopefully it will stop break
                     self.reconnect_on_broken_pipe()
+                except Exception as e:
+                    print(f"Unexpected error: {e}")
+                    time.sleep(2)
                     
         except KeyboardInterrupt:
             print("\nInterrupted! Closing the client...")
@@ -60,7 +63,7 @@ class UnixSocketClient:
         # Close the socket if is open
         if self.sock:
             self.sock.close()
-            print("Socket closed.")
+            print("Socket closed!")
 
 if __name__ == "__main__":
 
