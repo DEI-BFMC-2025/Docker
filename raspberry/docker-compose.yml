@@ -33,6 +33,7 @@ services:
     volumes:
       - shared-volume:/tmp
       - /run/udev:/run/udev:ro
+      - ./picam:/app
     tty: true
     privileged: true
     #command: python3 "client.py"
