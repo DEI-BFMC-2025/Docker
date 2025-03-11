@@ -14,21 +14,21 @@ class UnixSocketClient:
 
     def initialize_camera(self, config):
         camera = Picamera2()
-        mode = camera.sensor_modes[2]
-        q_w=mode['size'][0]//4 #1152 648
-        q_h=mode['size'][1]//4
+        #mode = camera.sensor_modes[0]
+        #q_w=mode['size'][0]//4 #1152 648
+        #q_h=mode['size'][1]//4
 
-        print (q_w,q_h)
+        #print (q_w,q_h)
         print(camera.camera_properties["PixelArraySize"])
         
     
-        quarter=(q_w,q_h)
-        q_size=tuple(quarter)
+        #quarter=(q_w,q_h)
+        #q_size=tuple(quarter)
         
-        config = camera.create_preview_configuration(sensor={'output_size': mode['size'],'bit_depth':mode['bit_depth']},
-                                                   main={'size':q_size, "format": "RGB888"}, display='main')
+        #config = camera.create_preview_configuration(sensor={'output_size': mode['size'],'bit_depth':mode['bit_depth']},
+        #                                           main={'size':q_size, "format": "RGB888"}, display='main')
         
-        #config = camera.create_preview_configuration(config)
+        config = camera.create_preview_configuration(config)
         #camera.align_configuration(config) # in case of use of bad format (read datasheet)
         camera.configure(config)
         camera.start()

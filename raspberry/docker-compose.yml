@@ -6,9 +6,9 @@ services:
     image: bfmc2025
     container_name: bfmc2025_container
     volumes:
-      - /tmp/.X11-unix:/tmp/.X11-unix
-      - shared-volume:/tmp
+      - /tmp:/tmp
       - ../../Brain/brain/src:/catkin_ws/src
+      #- /tmp/.X11-unix:/tmp/.X11-unix
     tty: true
     privileged: true
     environment:
@@ -31,7 +31,7 @@ services:
     image: bfmc2025_picamera2
     container_name: bfmc2025_picamera2_container
     volumes:
-      - shared-volume:/tmp
+      - /tmp:/tmp
       - /run/udev:/run/udev:ro
       - ./picam:/app
     tty: true

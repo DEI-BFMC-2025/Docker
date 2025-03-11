@@ -6,15 +6,6 @@ RUN apt-get update && \
   apt-get -y purge && \
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-#SHELL ["/bin/bash", "-c"]
-#ENV CATKIN_WS /catkin_ws
-
-#RUN source /opt/ros/$ROS_DISTRO/setup.bash && \
-#  mkdir -p $CATKIN_WS/src && \
-#  cd $CATKIN_WS && \
-#  catkin_make
-
-
 COPY noetic/requirements.txt .
 RUN pip3 install --no-cache-dir -r requirements.txt
 
@@ -27,8 +18,6 @@ RUN echo "  source /opt/ros/noetic/setup.bash" >> /root/.bashrc && \
     echo "  source /catkin_ws/devel/setup.bash" >> /root/.bashrc && \
     echo "fi" >> /root/.bashrc
 
-
-
 COPY /noetic/roslaunch.sh /roslaunch.sh
 
 COPY /noetic/entrypoint.sh /entrypoint.sh
@@ -36,8 +25,3 @@ RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 
 CMD ["/bin/bash"]
-#CMD ["/bin/bash", "-c", "source /opt/ros/$ROS_DISTRO/setup.bash && source /catkin_ws/devel/setup.bash"]
-
-
-
-
