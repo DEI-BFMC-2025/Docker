@@ -1,99 +1,97 @@
 #!/usr/bin/env python3
 import socket
-import numpy as np
-import time
 import sys
 from picamera2 import Picamera2
 
-class UnixSocketClient:
-    def __init__(self, socket_addr, config, retry_interval=1):
-        self.socket_addr = socket_addr
-        self.retry_interval = retry_interval
+class DualSocketClient:
+    # Define socket paths as class constants
+    SOCKET_BRAIN = "/tmp/bfmc_socket.sock"
+    SOCKET_DASHBOARD = "/tmp/bfmc_socket2.sock"
+
+    def __init__(self, config):
         self.camera = self.initialize_camera(config)
-        self.sock = None
+        self.brain_sock = None
+        self.dashboard_sock = None
+        self.brain_connected = False
+        self.dashboard_connected = False
 
     def initialize_camera(self, config):
         camera = Picamera2()
-        #mode = camera.sensor_modes[0]
-        #q_w=mode['size'][0]//4 #1152 648
-        #q_h=mode['size'][1]//4
-
-        #print (q_w,q_h)
         print(camera.camera_properties["PixelArraySize"])
-        
-    
-        #quarter=(q_w,q_h)
-        #q_size=tuple(quarter)
-        
-        #config = camera.create_preview_configuration(sensor={'output_size': mode['size'],'bit_depth':mode['bit_depth']},
-        #                                           main={'size':q_size, "format": "RGB888"}, display='main')
-        
         config = camera.create_preview_configuration(config)
-        #camera.align_configuration(config) # in case of use of bad format (read datasheet)
         camera.configure(config)
         camera.start()
         return camera
 
-    def wait_for_server(self):
-        # Keep attempting to connect to the server
-        while True:
-            try:
-                self.sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-                self.sock.connect(self.socket_addr)
-                print("Connected to server.")
-                break
-            except socket.error:
-                print(f"Camera ready to send frames, waiting for communication on the socket. Retrying in {self.retry_interval} second(s)...")
-                time.sleep(self.retry_interval)
-
-    def reconnect_on_broken_pipe(self):
-        # Reconnect to the server in case of a broken pipe
-        print("Broken pipe detected, attempting to reconnect...")
-        if self.sock:
-            self.sock.close()  # We need to close the old socket
-        self.wait_for_server()
-
-    def send_frames(self):
+    def handle_connection(self, sock_obj, connected_flag, socket_path):
+        """Manage connection state for a single socket"""
         try:
-            while True:
-                # capture image as numpy array
-                array = self.camera.capture_array("main")
-                arr2_pack = array.tobytes()
+            if not connected_flag:
+                if sock_obj:
+                    sock_obj.close()
+                new_sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+                new_sock.settimeout(5)  # Non-blocking connect attempt
+                new_sock.connect(socket_path)
+                new_sock.settimeout(None)
+                print(f"Connected to {socket_path}")
+                return new_sock, True
+            return sock_obj, True
+        except (socket.error, ConnectionRefusedError):
+            return sock_obj, False
 
-                try:
-                    self.sock.sendall(arr2_pack)
-                except (BrokenPipeError, socket.error):  #socket.error added to catch all socket errors hopefully it will stop break
-                    self.reconnect_on_broken_pipe()
-                except Exception as e:
-                    print(f"Unexpected error: {e}")
-                    time.sleep(2)
-                    
+    def send_data(self, sock_obj, connected_flag, socket_path, data):
+        """Send data to a single socket"""
+        if not connected_flag:
+            return False
+        
+        try:
+            sock_obj.sendall(data)
+            return True
+        except (BrokenPipeError, socket.error):
+            print(f"Connection lost on {socket_path}")
+            sock_obj.close()
+            return False
+
+    def run(self):
+        """Main application loop"""
+        try:
+            print("Starting frame streaming...")
+            while True:
+                # Capture single frame for both sockets
+                frame_data = self.camera.capture_array("main").tobytes()
+
+                # Handle brain socket
+                self.brain_sock, self.brain_connected = self.handle_connection(
+                    self.brain_sock, self.brain_connected, self.SOCKET_BRAIN
+                )
+                if self.brain_connected:
+                    self.brain_connected = self.send_data(
+                        self.brain_sock, self.brain_connected,
+                        self.SOCKET_BRAIN, frame_data
+                    )
+
+                # Handle dashboard socket
+                self.dashboard_sock, self.dashboard_connected = self.handle_connection(
+                    self.dashboard_sock, self.dashboard_connected, self.SOCKET_DASHBOARD
+                )
+                if self.dashboard_connected:
+                    self.dashboard_connected = self.send_data(
+                        self.dashboard_sock, self.dashboard_connected,
+                        self.SOCKET_DASHBOARD, frame_data
+                    )
+
         except KeyboardInterrupt:
             print("\nInterrupted! Closing the client...")
         finally:
-            self.close_socket()
-
-    def close_socket(self):
-        # Close the socket if is open
-        if self.sock:
-            self.sock.close()
-            print("Socket closed!")
+            if self.brain_sock: self.brain_sock.close()
+            if self.dashboard_sock: self.dashboard_sock.close()
+            print("All sockets closed")
 
 if __name__ == "__main__":
-
-    socket_addr = "/tmp/bfmc_socket.sock"
-
     config = {
-        "size": (320,240),   #320,240 or 4608,2592 
-        "format": "RGB888", 
-    }  
-    
-    client = UnixSocketClient(socket_addr, config, retry_interval = 2)
+        "size": (320, 240),
+        "format": "RGB888",
+    }
 
-    try:
-        client.wait_for_server()
-        client.send_frames()
-    except KeyboardInterrupt:
-        print("\n Exiting ...")
-        client.close_socket()
-        sys.exit(0)
+    client = DualSocketClient(config)
+    client.run()
