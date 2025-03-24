@@ -1,7 +1,9 @@
 services:
   gazebo_simulator:
-    build: .
-    image: eugen06/bfmc2025:latest
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    image: simulator25
     container_name: gazebo_simulator
     environment:
       - DISPLAY=$DISPLAY
