@@ -21,8 +21,7 @@ ENV DISPLAY=:1
 ENV QT_X11_NO_MITSHM=1
 
 # Create workspace
-WORKDIR /root/catkin_ws
-RUN mkdir -p src
+WORKDIR /root/bfmc
 
 # Expose ports if needed for ROS
 EXPOSE 11311
@@ -30,10 +29,12 @@ EXPOSE 11311
 
 # Source ROS setup file in the environment
 RUN echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc
+RUN echo "ROS_MASTER_URI=http://localhost:11311" >> ~/.bashrc
+RUN echo "ROS_HOSTNAME=localhost" >> ~/.bashrc
 
 # Use bash for the default shell
 SHELL ["/bin/bash", "-c"]  
 RUN source /opt/ros/noetic/setup.bash
 
 # Default command to bash
-CMD ["bash"]
+#CMD ["bash"]
