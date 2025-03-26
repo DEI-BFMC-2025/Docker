@@ -1,17 +1,24 @@
 services:
   gazebo_simulator:
-    build: 
+    build:
       context: .
       dockerfile: Dockerfile
-    image: simulator25
+      
+    image: eugen06/bfmc2025:latest
+    
     container_name: gazebo_simulator
+    
     environment:
       - DISPLAY=$DISPLAY
       - QT_X11_NO_MITSHM=1
+      
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
-      - /home/eugen/Desktop/Brain:/root/bfmc
+      - /home/${USER}/Desktop/Brain:/root/bfmc
+      
+      #- /home/eugen/Desktop/Brain:/root/bfmc
       # modify "home/eugen/Desktop/Brain" with the location of the prj folder in your pc
+      
     network_mode: host
     privileged: true
     stdin_open: true
