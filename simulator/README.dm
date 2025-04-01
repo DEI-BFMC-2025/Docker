@@ -1,40 +1,40 @@
 ## Enable display forwarding
-```sh
+```bash
 xhost +local:docker
 ```
 
 ## Start the container
-```sh
+```bash
 docker compose up -d
 ```
 
 ## Enter the container
-```sh
+```bash
 docker compose exec gazebo_simulator bash
 ```
 
 ## If you want to make sure the project is built correctly, run the script found in `/simulator/recompile.sh`
-```sh
+```bash
 ./recompile.sh
 ```
 
 ## Source
-```sh
+```bash
 source devel/setup.bash
 ```
 
 ## Launch the simulation
-```sh
+```bash
 roslaunch sim_pkg map_2024.launch
 ```
 
 ## Source again (if needed)
-```sh
-source devel/setup.bash
+```bash
+source devel/setup.babash
 ```
 
 ## Run the brain script
-```sh
+```bash
 cd brain/src/smart
 python3 main_brain.py
 ```
