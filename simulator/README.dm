@@ -1,23 +1,39 @@
-**Reset docker if it can't download/isntall packages whe building the image or inside the container** 
-sudo systemctl restart docker
-**Remove the <none> iamges**
-docker rmi $(docker images -f "dangling=true" -q)
-**Enable display forwarding**
+## Enable display forwarding
+```sh
 xhost +local:docker
+```
 
-docker-compose up --build
-docker exec -it gazebo_simulator bash
+## Start the container
+```sh
+docker compose up -d
+```
 
-source /opt/ros/noetic/setup.bash
-source src/simulator_2024/simulator_2024/devel/setup.bash
+## Enter the container
+```sh
+docker compose exec gazebo_simulator bash
+```
 
-roslaunch sim_pkg map_2024.launch 
+## If you want to make sure the project is built correctly, run the script found in `/simulator/recompile.sh`
+```sh
+./recompile.sh
+```
 
-catkin_make --pkg utils
-catkin_make
+## Source
+```sh
+source devel/setup.bash
+```
 
-export GAZEBO_MODEL_PATH="/root/catkin_ws/src/simulator_2024/simulator_2024/src/models_pkg:$GAZEBO_MODEL_PATH"
-export ROS_PACKAGE_PATH="/root/catkin_ws/src/simulator_2024/simulator_2024/src:$ROS_PACKAGE_PATH"
+## Launch the simulation
+```sh
+roslaunch sim_pkg map_2024.launch
+```
 
-export GAZEBO_MODEL_PATH="/home/eugen/catkin_ws/src/simulator_2024/simulator_2024/src/models_pkg:$GAZEBO_MODEL_PATH"
-export ROS_PACKAGE_PATH="/home/eugen/catkin_ws/src/simulator_2024/simulator_2024/src:$ROS_PACKAGE_PATH"
+## Source again (if needed)
+```sh
+source devel/setup.bash
+```
+
+## Run the brain script
+```sh
+cd brain/src/smart
+python3 main_brain.py
