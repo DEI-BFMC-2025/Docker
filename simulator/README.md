@@ -28,7 +28,7 @@ source devel/setup.bash
 roslaunch sim_pkg map_2024.launch
 ```
 
-## Source again (if needed)
+## Source again
 ```bash
 source devel/setup.babash
 ```
