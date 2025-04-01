@@ -37,3 +37,4 @@ source devel/setup.bash
 ```sh
 cd brain/src/smart
 python3 main_brain.py
+```
