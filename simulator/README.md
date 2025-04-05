@@ -5,6 +5,7 @@ xhost +local:docker
 
 ## Start the container
 ```bash
+cd Docker/simulator
 docker compose up -d
 ```
 
@@ -15,6 +16,7 @@ docker compose exec gazebo_simulator bash
 
 ## If you want to make sure the project is built correctly, run the script found in `/simulator/recompile.sh`
 ```bash
+cd simulator
 ./recompile.sh
 ```
 
@@ -28,9 +30,9 @@ source devel/setup.bash
 roslaunch sim_pkg map_2024.launch
 ```
 
-## Source again
+## Now in another tab, in order to run the brain, source again
 ```bash
-source devel/setup.babash
+source devel/setup.bash
 ```
 
 ## Run the brain script
