@@ -3,6 +3,13 @@
 xhost +local:docker
 ```
 
+## Modify the docker-compose.yml file
+```bash
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - /home/${USER}/Desktop/Brain:/root/bfmc  #adjust the directory containing the project
+```
+
 ## Start the container
 ```bash
 cd Docker/simulator
