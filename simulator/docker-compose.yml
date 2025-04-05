@@ -4,7 +4,7 @@ services:
       context: .
       dockerfile: Dockerfile
       
-    image: eugen06/bfmc2025:latest
+    image: gazebo_sim_img
     
     container_name: gazebo_simulator
     
