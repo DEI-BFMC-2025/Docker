@@ -45,5 +45,5 @@ source devel/setup.bash
 ## Run the brain script
 ```bash
 cd brain/src/smart
-python3 main_brain.py
+python3 main_brain.py --sim --random --show
 ```
