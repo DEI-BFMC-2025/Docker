@@ -19,6 +19,8 @@ docker compose up -d
 ## Enter the container
 ```bash
 docker compose exec gazebo_simulator bash
+or
+docker exec -it gazebo_simulator bash
 ```
 
 ## Inside the container terminal, if you want to make sure the project is built correctly, run the script `/simulator/recompile.sh`
