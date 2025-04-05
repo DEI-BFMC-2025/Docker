@@ -14,7 +14,7 @@ docker compose up -d
 docker compose exec gazebo_simulator bash
 ```
 
-## If you want to make sure the project is built correctly, run the script found in `/simulator/recompile.sh`
+## Inside the container terminal, if you want to make sure the project is built correctly, run the script `/simulator/recompile.sh`
 ```bash
 cd simulator
 ./recompile.sh
