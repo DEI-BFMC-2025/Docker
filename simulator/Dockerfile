@@ -31,6 +31,7 @@ EXPOSE 11311
 RUN echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc
 RUN echo "ROS_MASTER_URI=http://localhost:11311" >> ~/.bashrc
 RUN echo "ROS_HOSTNAME=localhost" >> ~/.bashrc
+RUN echo "source /root/bfmc/simulator/devel/setup.bash" >> ~/.bashrc
 
 # Use bash for the default shell
 SHELL ["/bin/bash", "-c"]  

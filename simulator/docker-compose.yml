@@ -18,8 +18,11 @@ services:
       
       #- /home/eugen/Desktop/Brain:/root/bfmc
       # modify "home/eugen/Desktop/Brain" with the location of the prj folder in your pc
+
+    ports:
+      - 11311:11311
       
-    network_mode: host
+    # network_mode: host
     privileged: true
     stdin_open: true
     tty: true
