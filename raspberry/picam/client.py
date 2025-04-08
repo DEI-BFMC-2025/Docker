@@ -57,6 +57,9 @@ class DualSocketClient:
         try:
             print("Starting frame streaming...")
             while True:
+
+                #print(self.camera.camera_properties)
+                #print(self.camera.capture_metadata())
                 # Capture single frame for both sockets
                 frame_data = self.camera.capture_array("main").tobytes()
 

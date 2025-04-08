@@ -8,7 +8,7 @@ services:
     volumes:
       - /tmp:/tmp
       - ../../Brain/brain/src:/catkin_ws/src
-      #- /tmp/.X11-unix:/tmp/.X11-unix
+      - /dev/shm:/dev/shm
     tty: true
     privileged: true
     environment:
@@ -16,10 +16,7 @@ services:
       - ROS_DISTRO=noetic
       - LD_LIBRARY_PATH=/opt/vc/lib
     devices:
-      - /dev/ttyACM0:/dev/ttyACM0
-      - /dev/ttyACM1:/dev/ttyACM1
-      - /dev/gpiomem:/dev/gpiomem
-      - /dev/mem:/dev/mem
+      - /dev:/dev
     #command: /bin/bash -c "source /opt/ros/noetic/setup.bash && source /catkin_ws/devel/setup.bash && bash"
     command: tail -f /dev/null
 
