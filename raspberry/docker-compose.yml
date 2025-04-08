@@ -7,8 +7,9 @@ services:
     container_name: bfmc2025_container
     volumes:
       - /tmp:/tmp
-      - ../../Brain/brain/src:/catkin_ws/src
+      - /home/${USER}/Desktop/Brain/brain/src:/catkin_ws/src
       - /dev/shm:/dev/shm
+    working_dir: /catkin_ws/src/smart
     tty: true
     privileged: true
     environment:
@@ -17,7 +18,6 @@ services:
       - LD_LIBRARY_PATH=/opt/vc/lib
     devices:
       - /dev:/dev
-    #command: /bin/bash -c "source /opt/ros/noetic/setup.bash && source /catkin_ws/devel/setup.bash && bash"
     command: tail -f /dev/null
 
     
@@ -31,9 +31,9 @@ services:
       - /tmp:/tmp
       - /run/udev:/run/udev:ro
       - ./picam:/app
+    working_dir: /app
     tty: true
     privileged: true
-    #command: python3 "client.py"
     command: tail -f /dev/null
 
 volumes:

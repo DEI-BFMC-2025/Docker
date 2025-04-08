@@ -21,8 +21,3 @@ COPY picam/requirements_camera.txt .
 RUN pip install --break-system-packages --no-cache-dir -r requirements_camera.txt
 
 WORKDIR /app
-
-#COPY picam/client.py .
-#COPY picam/client_wide.py .
-
-#CMD ["python3", "client.py"]

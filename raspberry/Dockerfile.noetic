@@ -19,14 +19,10 @@ RUN echo "  source /opt/ros/noetic/setup.bash" >> /root/.bashrc && \
     echo "fi" >> /root/.bashrc
 
 COPY /noetic/roslaunch.sh /roslaunch.sh
-
 COPY /noetic/entrypoint.sh /entrypoint.sh
-
 COPY /noetic/bno055.tar.gz /bno055.tar.gz
 
 RUN pip3 install bno055.tar.gz
-
-WORKDIR /catkin_ws/src/brain/src/smart
 
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
