@@ -34,7 +34,7 @@ services:
     working_dir: /app
     tty: true
     privileged: true
-    command: bash -c "python3 client.py"  # tail -f /dev/null
+    command: bash -c "python3 camera_server.py"  # tail -f /dev/null
     restart: unless-stopped               # automatic restart policy
 
 volumes:
