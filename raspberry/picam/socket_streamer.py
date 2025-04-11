@@ -22,11 +22,11 @@ def stream_to_socket(socket_path: str, shared_frame):
                 try:
                     sock.sendall(frame)
                 except (BrokenPipeError, socket.error):
-                    print(f"[{socket_path}] Disconnected while sending.")
+                    #print(f"[{socket_path}] Disconnected while sending.")
                     sock.close()
                     connected = False
 
         except (ConnectionRefusedError, FileNotFoundError, socket.error):
-            print(f"[{socket_path}] Unable to connect. Retrying...")
+            #print(f"[{socket_path}] Unable to connect. Retrying...")
             time.sleep(0.01)
             connected = False
