@@ -9,6 +9,7 @@ services:
       - /tmp:/tmp
       - /home/${USER}/Desktop/Brain/brain/src:/catkin_ws/src
       - /dev/shm:/dev/shm
+      - /run/udev:/run/udev:ro
     working_dir: /catkin_ws/src/smart
     tty: true
     privileged: true
@@ -20,22 +21,26 @@ services:
       - /dev:/dev
     command: tail -f /dev/null
 
-    
-  picamera:
-    build:
-      context: .
-      dockerfile: Dockerfile.picamera
-    image: bfmc2025_picamera2
-    container_name: bfmc2025_picamera2_container
-    volumes:
-      - /tmp:/tmp
-      - /run/udev:/run/udev:ro
-      - ./picam:/app
-    working_dir: /app
-    tty: true
-    privileged: true
-    command: bash -c "python3 camera_server.py"  # tail -f /dev/null
-    restart: unless-stopped               # automatic restart policy
+# We run on the host the camera now    
+#  picamera:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile.picamera
+#    image: bfmc2025_picamera2
+#    container_name: bfmc2025_picamera2_container
+#    volumes:
+#      - /tmp:/tmp
+#      - /run/udev:/run/udev:ro
+#      - ./picam:/app
+#    devices:
+#      - /dev:/dev
+#    working_dir: /app
+#    tty: true
+#    privileged: true
+#    command: tail -f /dev/null #bash -c "python3 camera_server.py" 
+#    restart: unless-stopped               # automatic restart policy
+#    shm_size: '1gb'
+
 
 volumes:
   shared-volume:

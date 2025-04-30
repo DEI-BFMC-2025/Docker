@@ -10,12 +10,15 @@ def start_camera(shared_frame: SharedFrame):
         "size": (320, 240),
         "format": "RGB888"
     })
+    mode = cam.sensor_modes[2]
+    config = cam.create_preview_configuration(sensor={'output_size': mode['size'],'bit_depth':mode['bit_depth']},
+                                           lores={'size':[320,240],'format': 'RGB888'}, display='lores')
     cam.configure(config)
     cam.start()
 
     while True:
         try:
-            frame = cam.capture_array("main").tobytes()
+            frame = cam.capture_array("lores").tobytes()
             shared_frame.write(frame)
         except Exception as e:
             print(f"Camera error: {e}")
