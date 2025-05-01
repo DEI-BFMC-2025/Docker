@@ -1,7 +1,7 @@
 FROM ros:noetic-ros-base
 
 RUN apt-get update && \
-  apt-get install -y ros-noetic-rosserial-arduino ros-noetic-rosserial git python3-pip libgl1 libgtk2.0-dev pkg-config python3-libgpiod libgpiod-dev ros-noetic-rqt ros-noetic-rqt-topic nano && \
+  apt-get install -y ros-noetic-rosserial-arduino ros-noetic-rosserial git python3-pip libgl1 libgtk2.0-dev pkg-config python3-libgpiod libgpiod-dev ros-noetic-rqt ros-noetic-rqt-topic  ros-noetic-rqt-publisher ros-noetic-rviz nano && \
   apt-get -y clean && \
   apt-get -y purge && \
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*

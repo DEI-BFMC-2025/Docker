@@ -9,7 +9,7 @@ q_h=mode['size'][1]//4
 
 print (q_w,q_h)
 
-#picam2.start_preview(Preview.QTGL,x=100,y=100,width=q_w,height=q_h)
+picam2.start_preview(Preview.QTGL,x=100,y=100,width=q_w,height=q_h)
 quarter=(q_w,q_h)
 q_size=tuple(quarter)
 
@@ -18,7 +18,7 @@ config = picam2.create_still_configuration(transform=Transform(hflip=1,vflip=1),
                                            lores={'size':q_size}, display='lores')
 picam2.configure(config)
 picam2.start()
-time.sleep(10)
-picam2.capture_file('Uncropped.jpg')
+time.sleep(100)
+#picam2.capture_file('Uncropped.jpg')
 
 picam2.stop()
