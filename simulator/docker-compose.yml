@@ -15,9 +15,10 @@ services:
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
       - /home/${USER}/Desktop/Brain:/root/bfmc
+      - /run/udev:/run/udev:ro
       
-      #- /home/eugen/Desktop/Brain:/root/bfmc
-      # modify "home/eugen/Desktop/Brain" with the location of the prj folder in your pc
+    devices:
+      - /dev/input:/dev/input
 
     ports:
       - 11311:11311
