@@ -20,8 +20,9 @@ services:
     devices:
       - /dev/input:/dev/input
 
-    ports:
-      - 11311:11311
+    # Uncomment the following lines if you want to connect to ros from the host
+    #ports:
+    #  - 11311:11311
       
     # network_mode: host
     privileged: true
