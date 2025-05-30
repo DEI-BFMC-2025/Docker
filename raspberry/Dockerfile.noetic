@@ -11,6 +11,12 @@ RUN pip3 install --no-cache-dir -r requirements.txt
 
 RUN mkdir -p /catkin_ws/src
 
+RUN apt-get update && \
+  apt-get install -y udev && \
+  apt-get -y clean && \
+  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+
 WORKDIR /
 
 RUN echo "  source /opt/ros/noetic/setup.bash" >> /root/.bashrc && \

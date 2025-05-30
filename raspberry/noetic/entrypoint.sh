@@ -9,10 +9,12 @@ fi
 
 source ~/catkin_ws/devel/setup.bash
 
-
 # get rid of a warning
 export LD_PRELOAD=/usr/local/lib/python3.8/dist-packages/sklearn/__check_build/../../scikit_learn.libs/libgomp-d22c30c5.so.1.0.0
 
+# Trigger udev events and settle them (detect devices plugged in after container start)
+udevadm trigger
+udevadm settle
 
 # Execute the command passed to the container
 exec "$@"

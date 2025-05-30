@@ -10,6 +10,7 @@ services:
       - /home/${USER}/Desktop/Brain/brain/src:/catkin_ws/src
       - /dev/shm:/dev/shm
       - /run/udev:/run/udev:ro
+
     working_dir: /catkin_ws/src/smart
     tty: true
     privileged: true
@@ -19,6 +20,11 @@ services:
       - LD_LIBRARY_PATH=/opt/vc/lib
     devices:
       - /dev:/dev
+      - /dev/ttyACM0:/dev/ttyACM0
+      - /dev/ttyACM1:/dev/ttyACM1
+      - /dev/ttyUSB0:/dev/ttyUSB0
+      - /dev/ttyUSB1:/dev/ttyUSB1
+
     command: tail -f /dev/null
 
 # We run on the host the camera now    
