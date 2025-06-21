@@ -28,7 +28,7 @@ COPY /noetic/roslaunch.sh /roslaunch.sh
 COPY /noetic/entrypoint.sh /entrypoint.sh
 COPY /noetic/bno055.tar.gz /bno055.tar.gz
 
-RUN pip3 install bno055.tar.gz
+#RUN pip3 install bno055.tar.gz
 
 RUN pip3 install ultralytics==8.0.12 -break-system-packages
 RUN pip install h5py==3.9.0
@@ -37,6 +37,11 @@ RUN pip install tensorflow
 RUN pip3 install --upgrade ultralytics
 RUN pip3 install "lap>=0.5.12"
 ENV YOLO_CONFIG_DIR=/tmp
+
+RUN apt-get update && \
+	apt-get install -y lsof iputils-ping iproute2 telnet && \
+	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+RUN pip3 install twisted
 
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
