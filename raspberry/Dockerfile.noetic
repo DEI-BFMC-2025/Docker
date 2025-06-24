@@ -38,10 +38,14 @@ RUN pip3 install --upgrade ultralytics
 RUN pip3 install "lap>=0.5.12"
 ENV YOLO_CONFIG_DIR=/tmp
 
+RUN pip install twisted
+
 RUN apt-get update && \
-	apt-get install -y lsof iputils-ping iproute2 telnet && \
-	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-RUN pip3 install twisted
+  apt-get install -y net-tools iproute2 iputils-ping lsof && \
+  apt-get -y clean && \
+  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+RUN pip install scipy
 
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]

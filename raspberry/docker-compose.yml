@@ -26,8 +26,11 @@ services:
       - /dev/ttyUSB1:/dev/ttyUSB1
     ports:
       - "9000:9000/udp"
-
+    cap_add:
+      - NET_RAW
     command: tail -f /dev/null
+    network_mode: host
+
 
 # We run on the host the camera now    
 #  picamera:
